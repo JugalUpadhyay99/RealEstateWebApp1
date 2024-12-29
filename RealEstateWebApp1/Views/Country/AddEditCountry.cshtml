@@ -1,0 +1,23 @@
+﻿@model CountryMasterViewModel
+@{
+    Layout = null;
+}
+
+
+<form asp-action="AddCountry" asp-controller="Country" method="post" onsubmit="return jQueryAjaxPost(this);">
+
+    <input type="hidden" asp-for="CountryId" />
+
+    
+    <div class="mb-3 mt-3">
+        <label for="CountryName" class="form-label">CountryName:</label>
+        <input type="text" class="form-control" id="CountryName" placeholder="Enter Country" asp-for="CountryName">
+    </div>
+
+ 
+    <div class=" form-group">
+        <input type="submit" value="save" class="btn-primary btn" />
+        <button type="button" class="btn btn-danger" data-bs-dismiss="offcanvas">Cancel</button>
+    </div>
+   
+</form>

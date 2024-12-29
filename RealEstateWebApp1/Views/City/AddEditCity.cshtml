@@ -1,0 +1,30 @@
+﻿@model CityMasterViewModel
+@{
+    Layout = null;
+}
+
+
+<form asp-action="SaveCity" asp-controller="City" method="post" onsubmit="return jQueryAjaxPost(this);">
+
+    <input type="hidden" asp-for="CityId" />
+
+    <div class="mb-3 mt-3">
+        <label for="StateId" class="form-label">Select State</label>
+        <select asp-for="StateId" class="form-control"
+                asp-items="@(new SelectList(Model.StateMasters,"StateId","StateName"))">
+            <option>---Select State---</option>
+        </select>
+    </div>
+
+    <div class="mb-3 mt-3">
+        <label for="CityName" class="form-label">CityName:</label>
+        <input type="text" class="form-control" id="CityName" placeholder="Enter City" name="CityName" asp-for="CityName">
+    </div>
+
+
+    <div class=" form-group">
+        <input type="submit" value="save" class="btn-primary btn" />
+        <button type="button" class="btn btn-danger" data-bs-dismiss="offcanvas">Cancel</button>
+    </div>
+
+</form>

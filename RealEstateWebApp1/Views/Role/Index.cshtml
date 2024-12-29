@@ -1,0 +1,188 @@
+﻿@{
+    Layout = "AdminLayout";
+}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>City</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">City</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+
+                        <div class="float-right">
+                            <a class="btn btn-success" onclick="showInPopup('@Url.Action("AddEditRole","Role")',false)"><i class="fa fa-plus"></i> Add New</a>
+
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="RoleMaster" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    
+                                    <th>RoleName</th>
+                                    <th>Action</th>
+
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+<div class="offcanvas offcanvas-end" id="demo">
+    <div class="offcanvas-header">
+        <h1 class="offcanvas-title">Add State</h1>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body" id="body">
+        <p>Some text lorem ipsum.</p>
+        <p>Some text lorem ipsum.</p>
+        <button class="btn btn-secondary" type="button">A Button</button>
+    </div>
+</div>
+
+@section scripts {
+
+    <script>
+
+        var dataTable;
+
+        $(document).ready(function () {
+            dataTable = $("#RoleMaster").DataTable({
+                "ajax": {
+                    "url": "/Role/GetAllRole",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "roleName" },
+
+                    {
+                        "data": "roleId", "render": function (data) {
+                            return "<a class='btn btn-primary btn-sm' onclick=showInPopup('@Url.Action("AddEditRole", "Role")/" + data + "',true)><i class='fa fa-pencil'></i>Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete(" + data + ")><i class='fa fa-trash'></i> Delete</a>";
+                        },
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "150px"
+                    }
+                ],
+                "language": {
+                    "emptyTable": "No data found"
+                }
+            });
+        });
+        const showInPopup = (url, isEdit) => {
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function (res) {
+                    $('#body').html(res);
+                    if (!isEdit) {
+                        $('#title').html('Add Role');
+                    }
+                    else {
+                        $('#title').html('Edit Role');
+                    }
+                    var myOffcanvas = document.getElementById('demo')
+                    var bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas)
+                    bsOffcanvas.show()
+                },
+            });
+        }
+        const jQueryAjaxPost = form => {
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.result) {
+                            $('#body').html('');
+                            $('#title').html('');
+
+                            var myOffcanvas = document.getElementById('demo')
+                            let openedCanvas = bootstrap.Offcanvas.getInstance(myOffcanvas);
+                            openedCanvas.hide();
+
+                            dataTable.ajax.reload();
+                            swal(res.message, {
+                                icon: "success",
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err)
+                    }
+                })
+                return false;
+            }
+            catch (ex) {
+                console.log(ex)
+            }
+        }
+        function Delete(id) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this record!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("RemoveRole", "Role")/' + id,
+                            success: function (data) {
+                                if (data.result == true) {
+                                    dataTable.ajax.reload();
+
+                                    swal(data.message, {
+                                        icon: "success",
+                                    });
+                                }
+                                else {
+                                    swal("Error");
+                                }
+                            }
+                        });
+                    }
+                });
+        }
+    </script>
+}

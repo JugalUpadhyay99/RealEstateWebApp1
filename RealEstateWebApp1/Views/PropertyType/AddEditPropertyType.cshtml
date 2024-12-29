@@ -1,0 +1,22 @@
+﻿@model PropertyTypeMasterViewModel
+@{
+    Layout = null;
+}
+
+<form asp-action="SaveType" asp-controller="PropertyType" method="post" onsubmit="return jQueryAjaxPost(this);">
+
+    <input type="hidden" asp-for="PropertyTypeId"/>
+
+
+    <div class="mb-3 mt-3">
+        <label for="PropertyTypeName" class="form-label">PropertyTypeName:</label>
+        <input type="text" class="form-control" id="PropertyTypeName" placeholder="Enter Type" asp-for="PropertyTypeName">
+    </div>
+
+
+    <div class=" form-group">
+        <input type="submit" value="save" class="btn-primary btn" />
+        <button type="button" class="btn btn-danger" data-bs-dismiss="offcanvas">Cancel</button>
+    </div>
+
+</form>

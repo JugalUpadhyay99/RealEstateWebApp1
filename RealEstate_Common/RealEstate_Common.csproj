@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RealEstate_BusinessEntity\RealEstate_BusinessEntity.csproj" />
+    <ProjectReference Include="..\RealEstate_DataEntity\RealEstate_DataEntity.csproj" />
+  </ItemGroup>
+
+</Project>
